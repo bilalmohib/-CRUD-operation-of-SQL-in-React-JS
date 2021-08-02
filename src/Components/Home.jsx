@@ -36,6 +36,7 @@ import Paper from '@material-ui/core/Paper';
 
 //Importing Styling
 import "../Styling/Home.css";
+import busMoving from "../UI/busmoving.gif";
 import { useState } from 'react';
 import { useEffect } from 'react';
 
@@ -414,7 +415,7 @@ export default function Home() {
 
   const handleUpdateBus = () => {
     fetch('http://localhost:5000/api/' + 'Bus', {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -468,12 +469,12 @@ export default function Home() {
           'Content-Type': 'application/json'
         }
       })
-      .then(() => {
-        alert(`Deleted Successfully`)
-      },
-        (error) => {
-          alert('Failed to delete data' + error);
-        })
+        .then(() => {
+          alert(`Deleted Successfully`)
+        },
+          (error) => {
+            alert('Failed to delete data' + error);
+          })
     }
 
     //Resetting the values
@@ -579,191 +580,207 @@ export default function Home() {
       </div>
 
       <div className={classes.root}>
-        <TabPanel value={value} index={0}>
-          <div>
-            <br /><br /><br />
-            <h1 className="text-dark text-center">CRUD Operations for Bus Table</h1>
-            <br />
-            <div className={classes2.root}>
-              <AppBar position="static">
-                <Tabs
-                  variant="fullWidth"
-                  value={value2}
-                  onChange={handleChange2}
-                  aria-label="nav tabs example"
-                >
-                  <LinkTab className="text-white" label="GET" href="/drafts" {...a12yProps(0)} />
-                  <LinkTab className="text-white" label="INSERT" href="/drafts" {...a12yProps(1)} />
-                  <LinkTab className="text-white" label="UPDATE" href="/trash" {...a12yProps(2)} />
-                  <LinkTab className="text-white" label="DELETE" href="/spam" {...a12yProps(3)} />
-                </Tabs>
-              </AppBar>
-              <TabPanel value={value2} index={0}>
-                <h2>GET the data</h2>
-                <hr />
-
-                <table class="table table-hover">
-                  <thead>
-                    <tr>
-                      <th>BUS NO.</th>
-                      <th>COLOR</th>
-                      <th>DRIVER ID</th>
-                      <th>ROUTE ID</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {busData.map(bus =>
-                      <tr key={bus.BusNo}>
-                        <td>{bus.BusNo}</td>
-                        <td>{bus.Color}</td>
-                        <td>{bus.DriverID}</td>
-                        <td>{bus.RouteID}</td>
-                      </tr>)}
-                  </tbody>
-                </table>
-
-              </TabPanel>
-              <TabPanel value={value2} index={1}>
-                <h2>INSERT the Data</h2>
-                <hr />
-                <form className={classesForm.root} noValidate autoComplete="off">
-                  <div className="d-flex justify-content-evenly w-100">
-                    <h5 className="mt-3 text-bold">BusNo : </h5>
-                    <TextField className="ml-7" id="standard-basic" onChange={(e) => setBusNo(e.target.value)} label="Enter the BusNo" />
-                  </div>
-
-                  <div className="d-flex justify-content-evenly w-100">
-                    <h5 className="mt-3 text-bold">Color : </h5>
-                    <TextField className="ml-6" id="standard-basic" label="Color" onChange={(e) => setColor(e.target.value)} />
-                  </div>
-
-                  <div className="d-flex justify-content-evenly w-100">
-                    <h5 className="mt-3 text-bold">DriverID : </h5>
-                    <TextField className="ml-4" id="standard-basic" label="DriverID" onChange={(e) => setDriverID(e.target.value)} />
-                  </div>
-
-                  <div className="d-flex justify-content-evenly w-100">
-                    <h5 className="mt-3 text-bold">RouteID : </h5>
-                    <TextField className="ml-4" id="standard-basic" label="RouteID" onChange={(e) => setRouteID(e.target.value)} />
-                  </div>
-
+        <div className="container">
+          <div className="row">
+            <div className="col-md-8">
+              <TabPanel value={value} index={0}>
+                <div>
+                  <br /><br /><br />
+                  <h1 className="text-dark text-center">CRUD Operations for Bus Table</h1>
                   <br />
+                  <div className={classes2.root}>
+                    <AppBar position="static">
+                      <Tabs
+                        variant="fullWidth"
+                        value={value2}
+                        onChange={handleChange2}
+                        aria-label="nav tabs example"
+                      >
+                        <LinkTab className="text-white" label="GET" href="/drafts" {...a12yProps(0)} />
+                        <LinkTab className="text-white" label="INSERT" href="/drafts" {...a12yProps(1)} />
+                        <LinkTab className="text-white" label="UPDATE" href="/trash" {...a12yProps(2)} />
+                        <LinkTab className="text-white" label="DELETE" href="/spam" {...a12yProps(3)} />
+                      </Tabs>
+                    </AppBar>
+                    <TabPanel value={value2} index={0}>
+                      <h2>GET the data</h2>
+                      <hr />
 
-                  <Button variant="outlined" onClick={handleSubmitBus} color="primary">
-                    INSERT
-                  </Button>
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>BUS NO.</th>
+                            <th>COLOR</th>
+                            <th>DRIVER ID</th>
+                            <th>ROUTE ID</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {busData.map(bus =>
+                            <tr key={bus.BusNo}>
+                              <td>{bus.BusNo}</td>
+                              <td>{bus.Color}</td>
+                              <td>{bus.DriverID}</td>
+                              <td>{bus.RouteID}</td>
+                            </tr>)}
+                        </tbody>
+                      </table>
 
-                </form>
-              </TabPanel>
-              <TabPanel value={value2} index={2}>
-                <h2>UPDATE the Data</h2>
-                <hr />
-                <h3>Select the Bus No Which you want to change</h3>
-                <br />
-                <div className="input-group input-group-md category_select">
-                  <span className="input-group-addon glyphicon glyphicon-search" id="sizing-addon2"></span>
-                  <select style={{ fontSize: "15px", width: "200px" }} value={currentBusNo}
-                    onChange={(e) => changingTheCurrentBusNoValue(e, 1)} className="form-control">
-                    {busData.map((v, i) => {
-                      return <option value={i} key={i}>
-                        {v.BusNo}
-                      </option>
-                    })}
-                  </select>
-                </div>
-                <br />
+                    </TabPanel>
+                    <TabPanel value={value2} index={1}>
+                      <h2>INSERT the Data</h2>
+                      <hr />
+                      <form className={classesForm.root} noValidate autoComplete="off">
+                        <div className="d-flex justify-content-evenly w-100">
+                          <h5 className="mt-3 text-bold">BusNo : </h5>
+                          <TextField className="ml-7" id="standard-basic" onChange={(e) => setBusNo(e.target.value)} label="Enter the BusNo" />
+                        </div>
 
-                {(loading) ? (
-                  <>
-                    <h3 className="text-success text-center">LOADING</h3>
-                  </>
-                ) : (
-                  <>
-                    <form className={classesForm.root} noValidate autoComplete="off">
-                      <div className="d-flex justify-content-evenly w-100">
-                        <h5 className="mt-3 text-bold">BusNo : </h5>
-                        <TextField className="ml-7" id="standard-basic" label="Enter the BusNo" value={busNo_U} />
-                      </div>
+                        <div className="d-flex justify-content-evenly w-100">
+                          <h5 className="mt-3 text-bold">Color : </h5>
+                          <TextField className="ml-6" id="standard-basic" label="Color" onChange={(e) => setColor(e.target.value)} />
+                        </div>
 
-                      <div className="d-flex justify-content-evenly w-100">
-                        <h5 className="mt-3 text-bold">Color : </h5>
-                        <TextField className="ml-6" id="standard-basic" label="Color" onChange={(e) => setColor_U(e.target.value)} value={color_U} />
-                      </div>
+                        <div className="d-flex justify-content-evenly w-100">
+                          <h5 className="mt-3 text-bold">DriverID : </h5>
+                          <TextField className="ml-4" id="standard-basic" label="DriverID" onChange={(e) => setDriverID(e.target.value)} />
+                        </div>
 
-                      <div className="d-flex justify-content-evenly w-100">
-                        <h5 className="mt-3 text-bold">DriverID : </h5>
-                        <TextField className="ml-4" id="standard-basic" label="DriverID" onChange={(e) => setDriverID_U(e.target.value)} value={driverID_U} />
-                      </div>
+                        <div className="d-flex justify-content-evenly w-100">
+                          <h5 className="mt-3 text-bold">RouteID : </h5>
+                          <TextField className="ml-4" id="standard-basic" label="RouteID" onChange={(e) => setRouteID(e.target.value)} />
+                        </div>
 
-                      <div className="d-flex justify-content-evenly w-100">
-                        <h5 className="mt-3 text-bold">RouteID : </h5>
-                        <TextField className="ml-4" id="standard-basic" label="RouteID" onChange={(e) => setRouteID_U(e.target.value)} value={routeID_U} />
+                        <br />
+
+                        <Button variant="outlined" onClick={handleSubmitBus} color="primary">
+                          INSERT
+                        </Button>
+
+                      </form>
+                    </TabPanel>
+                    <TabPanel value={value2} index={2}>
+                      <h2>UPDATE the Data</h2>
+                      <hr />
+                      <h3>Select the Bus No Which you want to change</h3>
+                      <br />
+                      <div className="input-group input-group-md category_select">
+                        <span className="input-group-addon glyphicon glyphicon-search" id="sizing-addon2"></span>
+                        <select style={{ fontSize: "15px", width: "200px" }} value={currentBusNo}
+                          onChange={(e) => changingTheCurrentBusNoValue(e, 1)} className="form-control">
+                          {busData.map((v, i) => {
+                            return <option value={i} key={i}>
+                              {v.BusNo}
+                            </option>
+                          })}
+                        </select>
                       </div>
                       <br />
 
-                      <button onClick={handleUpdateBus} className="btn btn-success btn-round">UPDATE</button>
+                      {(loading) ? (
+                        <>
+                          <h3 className="text-success text-center">LOADING</h3>
+                        </>
+                      ) : (
+                        <>
+                          <form className={classesForm.root} noValidate autoComplete="off">
+                            <div className="d-flex justify-content-evenly w-100">
+                              <h5 className="mt-3 text-bold">BusNo : </h5>
+                              <TextField className="ml-7" id="standard-basic" label="Enter the BusNo" value={busNo_U} />
+                            </div>
 
-                    </form>
-                  </>
-                )}
+                            <div className="d-flex justify-content-evenly w-100">
+                              <h5 className="mt-3 text-bold">Color : </h5>
+                              <TextField className="ml-6" id="standard-basic" label="Color" onChange={(e) => setColor_U(e.target.value)} value={color_U} />
+                            </div>
+
+                            <div className="d-flex justify-content-evenly w-100">
+                              <h5 className="mt-3 text-bold">DriverID : </h5>
+                              <TextField className="ml-4" id="standard-basic" label="DriverID" onChange={(e) => setDriverID_U(e.target.value)} value={driverID_U} />
+                            </div>
+
+                            <div className="d-flex justify-content-evenly w-100">
+                              <h5 className="mt-3 text-bold">RouteID : </h5>
+                              <TextField className="ml-4" id="standard-basic" label="RouteID" onChange={(e) => setRouteID_U(e.target.value)} value={routeID_U} />
+                            </div>
+                            <br />
+
+                            <button onClick={handleUpdateBus} className="btn btn-success btn-round">UPDATE</button>
+
+                          </form>
+                        </>
+                      )}
 
 
-              </TabPanel>
-              <TabPanel value={value2} index={3}>
-                <h2>DELETE Any Row</h2>
-                <hr />
-                <h3>Select the Bus No of Which you want to Delete data</h3>
-                <br />
-                <div className="input-group input-group-md category_select">
-                  <span className="input-group-addon glyphicon glyphicon-search" id="sizing-addon2"></span>
-                  <select style={{ fontSize: "15px", width: "200px" }} value={currentBusNo}
-                    onChange={(e) => changingTheCurrentBusNoValue(e, 2)} className="form-control">
-                    {busData.map((v, i) => {
-                      return <option value={i} key={i}>
-                        {v.BusNo}
-                      </option>
-                    })}
-                  </select>
-                </div>
-                <br />
-
-                {(loading) ? (
-                  <>
-                    <h3 className="text-success text-center">LOADING</h3>
-                  </>
-                ) : (
-                  <>
-                    <form className={classesForm.root} noValidate autoComplete="off">
-                      <div className="d-flex justify-content-evenly w-100">
-                        <h5 className="mt-3 text-bold">BusNo : </h5>
-                        <TextField className="ml-7" id="standard-basic" label="Enter the BusNo" contentEditable={false} value={busNo_U} />
-                      </div>
-
-                      <div className="d-flex justify-content-evenly w-100">
-                        <h5 className="mt-3 text-bold">Color : </h5>
-                        <TextField className="ml-6" id="standard-basic" label="Color" contentEditable={false} value={color_U} />
-                      </div>
-
-                      <div className="d-flex justify-content-evenly w-100">
-                        <h5 className="mt-3 text-bold">DriverID : </h5>
-                        <TextField className="ml-4" id="standard-basic" label="DriverID" contentEditable={false} value={driverID_U} />
-                      </div>
-
-                      <div className="d-flex justify-content-evenly w-100">
-                        <h5 className="mt-3 text-bold">RouteID : </h5>
-                        <TextField className="ml-4" id="standard-basic" label="RouteID" contentEditable={false} value={routeID_U} />
+                    </TabPanel>
+                    <TabPanel value={value2} index={3}>
+                      <h2>DELETE Any Row</h2>
+                      <hr />
+                      <h3>Select the Bus No of Which you want to Delete data</h3>
+                      <br />
+                      <div className="input-group input-group-md category_select">
+                        <span className="input-group-addon glyphicon glyphicon-search" id="sizing-addon2"></span>
+                        <select style={{ fontSize: "15px", width: "200px" }} value={currentBusNo}
+                          onChange={(e) => changingTheCurrentBusNoValue(e, 2)} className="form-control">
+                          {busData.map((v, i) => {
+                            return <option value={i} key={i}>
+                              {v.BusNo}
+                            </option>
+                          })}
+                        </select>
                       </div>
                       <br />
-                    <hr />
-                    <button onClick={deleteBusNo} className="btn btn-danger btn-round">DELETE</button>
 
-                    </form>
-                  </>
-                )}
+                      {(loading) ? (
+                        <>
+                          <h3 className="text-success text-center">LOADING</h3>
+                        </>
+                      ) : (
+                        <>
+                          <form className={classesForm.root} noValidate autoComplete="off">
+                            <div className="d-flex justify-content-evenly w-100">
+                              <h5 className="mt-3 text-bold">BusNo : </h5>
+                              <TextField className="ml-7" id="standard-basic" label="Enter the BusNo" contentEditable={false} value={busNo_U} />
+                            </div>
+
+                            <div className="d-flex justify-content-evenly w-100">
+                              <h5 className="mt-3 text-bold">Color : </h5>
+                              <TextField className="ml-6" id="standard-basic" label="Color" contentEditable={false} value={color_U} />
+                            </div>
+
+                            <div className="d-flex justify-content-evenly w-100">
+                              <h5 className="mt-3 text-bold">DriverID : </h5>
+                              <TextField className="ml-4" id="standard-basic" label="DriverID" contentEditable={false} value={driverID_U} />
+                            </div>
+
+                            <div className="d-flex justify-content-evenly w-100">
+                              <h5 className="mt-3 text-bold">RouteID : </h5>
+                              <TextField className="ml-4" id="standard-basic" label="RouteID" contentEditable={false} value={routeID_U} />
+                            </div>
+                            <br />
+                            <hr />
+                            <button onClick={deleteBusNo} className="btn btn-danger btn-round">DELETE</button>
+
+                          </form>
+                        </>
+                      )}
+                    </TabPanel>
+                  </div>
+                </div>
               </TabPanel>
             </div>
+            <div className="col-md-4">
+              <br />
+              <br />
+              <br />
+              <hr />
+              {/* <h1>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Est aliquam, eum velit nobis alias ut officia debitis pariatur corrupti eius earum a ratione dicta inventore autem dolor delectus! Ipsam, quidem!</h1> */}
+
+              <img src={busMoving} className="busmoving" alt="" />
+            </div>
           </div>
-        </TabPanel>
+        </div>
+
         <TabPanel value={value} index={1}>
           <div>
             <h1 className="text-dark text-center">CRUD Operations for Bus Driver Table</h1>

@@ -29,3 +29,11 @@
 {
     width: fit-content !important;
 }
+.busmoving
+{
+    width: 450px;
+    height: 300px;
+    border: 2px solid grey;
+    box-shadow: 4px 3px 3px rgb(91, 214, 148);
+    border-radius: 50%;
+}
