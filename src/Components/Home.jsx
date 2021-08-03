@@ -224,6 +224,7 @@ export default function Home() {
   const [routeID, setRouteID] = useState("");
 
   const [currentBusNo, setCurrentBusNo] = useState(0);
+  const [currentBusNoID, setCurrentBusNoID] = useState("");
 
   const [loading, setLoading] = useState(true);
 
@@ -402,6 +403,7 @@ export default function Home() {
       .then(res => res.json())
       .then((result) => {
         alert("Sent Successfully");
+        refreshList();
         console.log("The Result is ==> " + result);
       },
         (error) => {
@@ -428,13 +430,6 @@ export default function Home() {
       .then((result) => {
         alert("Updated Successfully");
         console.log("The Result is ==> " + result);
-        //////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////
       },
         (error) => {
           alert('Failed to send data' + error);
@@ -443,18 +438,51 @@ export default function Home() {
   }
 
   //Changing the current bus number
-  const changingTheCurrentBusNoValue = (e) => {
+  const changingTheCurrentBusNoValue = (e, option) => {
 
     let index = e.target.value;
 
     //alert(e.target.value);
 
-    setCurrentBusNo(e.target.value);
+    if (option == 1) {
+      setCurrentBusNo(e.target.value);
+    }
+    else if (option == 2) {
+      setCurrentBusNo(e.target.value);
+      setCurrentBusNoID(busData[index].BusNo);
+    }
 
     setBusNo_U(busData[index].BusNo);
     setColor_U(busData[index].Color);
     setDriverID_U(busData[index].DriverID);
     setRouteID_U(busData[index].RouteID);
+  }
+
+  const deleteBusNo = () => {
+    alert(currentBusNoID)
+    if (window.confirm('Are you sure you want to delete?')) {
+      fetch('http://localhost:5000/api/' + 'Bus' + currentBusNoID, {
+        method: 'DELETE',
+        header: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(() => {
+        alert(`Deleted Successfully`)
+      },
+        (error) => {
+          alert('Failed to delete data' + error);
+        })
+    }
+
+    //Resetting the values
+    setCurrentBusNo(0);
+
+    setBusNo_U(busData[0].BusNo);
+    setColor_U(busData[0].Color);
+    setDriverID_U(busData[0].DriverID);
+    setRouteID_U(busData[0].RouteID);
   }
 
   useEffect(() => {
@@ -635,7 +663,7 @@ export default function Home() {
                 <div className="input-group input-group-md category_select">
                   <span className="input-group-addon glyphicon glyphicon-search" id="sizing-addon2"></span>
                   <select style={{ fontSize: "15px", width: "200px" }} value={currentBusNo}
-                    onChange={(e) => changingTheCurrentBusNoValue(e)} className="form-control">
+                    onChange={(e) => changingTheCurrentBusNoValue(e, 1)} className="form-control">
                     {busData.map((v, i) => {
                       return <option value={i} key={i}>
                         {v.BusNo}
@@ -651,7 +679,7 @@ export default function Home() {
                   </>
                 ) : (
                   <>
-                    <form className={classesForm.root} noValidate onClick={() => handleSubmitBus} autoComplete="off">
+                    <form className={classesForm.root} noValidate autoComplete="off">
                       <div className="d-flex justify-content-evenly w-100">
                         <h5 className="mt-3 text-bold">BusNo : </h5>
                         <TextField className="ml-7" id="standard-basic" label="Enter the BusNo" value={busNo_U} />
@@ -682,7 +710,56 @@ export default function Home() {
 
               </TabPanel>
               <TabPanel value={value2} index={3}>
-                DELETE
+                <h2>DELETE Any Row</h2>
+                <hr />
+                <h3>Select the Bus No of Which you want to Delete data</h3>
+                <br />
+                <div className="input-group input-group-md category_select">
+                  <span className="input-group-addon glyphicon glyphicon-search" id="sizing-addon2"></span>
+                  <select style={{ fontSize: "15px", width: "200px" }} value={currentBusNo}
+                    onChange={(e) => changingTheCurrentBusNoValue(e, 2)} className="form-control">
+                    {busData.map((v, i) => {
+                      return <option value={i} key={i}>
+                        {v.BusNo}
+                      </option>
+                    })}
+                  </select>
+                </div>
+                <br />
+
+                {(loading) ? (
+                  <>
+                    <h3 className="text-success text-center">LOADING</h3>
+                  </>
+                ) : (
+                  <>
+                    <form className={classesForm.root} noValidate autoComplete="off">
+                      <div className="d-flex justify-content-evenly w-100">
+                        <h5 className="mt-3 text-bold">BusNo : </h5>
+                        <TextField className="ml-7" id="standard-basic" label="Enter the BusNo" contentEditable={false} value={busNo_U} />
+                      </div>
+
+                      <div className="d-flex justify-content-evenly w-100">
+                        <h5 className="mt-3 text-bold">Color : </h5>
+                        <TextField className="ml-6" id="standard-basic" label="Color" contentEditable={false} value={color_U} />
+                      </div>
+
+                      <div className="d-flex justify-content-evenly w-100">
+                        <h5 className="mt-3 text-bold">DriverID : </h5>
+                        <TextField className="ml-4" id="standard-basic" label="DriverID" contentEditable={false} value={driverID_U} />
+                      </div>
+
+                      <div className="d-flex justify-content-evenly w-100">
+                        <h5 className="mt-3 text-bold">RouteID : </h5>
+                        <TextField className="ml-4" id="standard-basic" label="RouteID" contentEditable={false} value={routeID_U} />
+                      </div>
+                      <br />
+                    <hr />
+                    <button onClick={deleteBusNo} className="btn btn-danger btn-round">DELETE</button>
+
+                    </form>
+                  </>
+                )}
               </TabPanel>
             </div>
           </div>
