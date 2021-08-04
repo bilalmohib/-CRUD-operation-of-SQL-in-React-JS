@@ -218,10 +218,14 @@ export default function Home() {
   //States defined for the data of Bus
   const [busData, setBusData] = useState([]);
 
-  const [BusNo, setBusNo] = useState("");
-  const [Color, setColor] = useState("");
-  const [DriverID, setDriverID] = useState(0);
-  const [RouteID, setRouteID] = useState("");
+  const [busNo, setBusNo] = useState("");
+  const [color, setColor] = useState("");
+  const [driverID, setDriverID] = useState(0);
+  const [routeID, setRouteID] = useState("");
+
+  const [currentBusNo, setCurrentBusNo] = useState(0);
+
+  const [loading,setLoading] = useState(true);
   ////////////////////////////////////
 
   const isMenuOpen = Boolean(anchorEl);
@@ -388,7 +392,8 @@ export default function Home() {
       .then(response => response.json())
       .then(data => {
         setBusData(data);
-        console.log("Data is equal to==>",data);
+        setLoading(false);
+        console.log("Data is equal to==>", data);
       })
   }
 
@@ -400,10 +405,10 @@ export default function Home() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        BusNo: BusNo,
-        Color: Color,
-        DriverID: DriverID,
-        RouteID: RouteID
+        BusNo: busNo,
+        Color: color,
+        DriverID: driverID,
+        RouteID: routeID
       })
     })
       .then(res => res.json())
@@ -414,6 +419,7 @@ export default function Home() {
           alert('Failed to send data');
         })
   }
+
 
   useEffect(() => {
     refreshList();
@@ -435,7 +441,7 @@ export default function Home() {
         </React.Fragment>
       ))}
       <div className={classes.grow}>
-        <AppBar position="static">
+        <AppBar position="fixed">
           <Toolbar>
             {['left'].map((anchor) => (
               <React.Fragment key={anchor}>
@@ -585,39 +591,58 @@ export default function Home() {
                 </form>
               </TabPanel>
               <TabPanel value={value2} index={2}>
-              <h2>UPDATE the Below Data</h2>
+                <h2>UPDATE the Below Data</h2>
                 <hr />
                 <h3>Select the Bus No Which you want to change</h3>
-                
+                <br />
+                <div className="input-group input-group-md category_select">
+                  <span className="input-group-addon glyphicon glyphicon-search" id="sizing-addon2"></span>
+                  <select style={{ fontSize: "15px", width: "200px" }} value={currentBusNo}
+                    onChange={(e) => setCurrentBusNo(e.target.value)} className="form-control">
+                    {busData.map((v, i) => {
+                      return <option value={i} key={i}>
+                        {v.BusNo}
+                      </option>
+                    })}
+                  </select>
+                </div>
+                <br />
 
-                <form className={classesForm.root} noValidate onClick={() => handleSubmitBus} autoComplete="off">
-                  <div className="d-flex justify-content-evenly w-100">
-                    <h5 className="mt-3 text-bold">BusNo : </h5>
-                    <TextField className="ml-7" id="standard-basic" label="Enter the BusNo" />
-                  </div>
+                {(loading) ? (
+                  <>
+                      <h3 className="text-success text-center">LOADING</h3>
+                  </>
+                ) : (
+                  <>
+                    <form className={classesForm.root} noValidate onClick={() => handleSubmitBus} autoComplete="off">
+                      <div className="d-flex justify-content-evenly w-100">
+                        <h5 className="mt-3 text-bold">BusNo : </h5>
+                        <TextField className="ml-7" id="standard-basic" label="Enter the BusNo" value={busData[currentBusNo].BusNo} />
+                      </div>
 
-                  <div className="d-flex justify-content-evenly w-100">
-                    <h5 className="mt-3 text-bold">Color : </h5>
-                    <TextField className="ml-6" id="standard-basic" label="Color" />
-                  </div>
+                      <div className="d-flex justify-content-evenly w-100">
+                        <h5 className="mt-3 text-bold">Color : </h5>
+                        <TextField className="ml-6" id="standard-basic" label="Color" value={busData[currentBusNo].Color} />
+                      </div>
 
-                  <div className="d-flex justify-content-evenly w-100">
-                    <h5 className="mt-3 text-bold">DriverID : </h5>
-                    <TextField className="ml-4" id="standard-basic" label="DriverID" />
-                  </div>
+                      <div className="d-flex justify-content-evenly w-100">
+                        <h5 className="mt-3 text-bold">DriverID : </h5>
+                        <TextField className="ml-4" id="standard-basic" label="DriverID" value={busData[currentBusNo].DriverID} />
+                      </div>
 
-                  <div className="d-flex justify-content-evenly w-100">
-                    <h5 className="mt-3 text-bold">RouteID : </h5>
-                    <TextField className="ml-4" id="standard-basic" label="RouteID" />
-                  </div>
+                      <div className="d-flex justify-content-evenly w-100">
+                        <h5 className="mt-3 text-bold">RouteID : </h5>
+                        <TextField className="ml-4" id="standard-basic" label="RouteID" value={busData[currentBusNo].RouteID} />
+                      </div>
+                      <br />
+                      
+                      <button className="btn btn-success btn-round">UPDATE</button>
+                      
+                    </form>
+                  </>
+                )}
 
-                  <br />
 
-                  <Button variant="outlined" onClick={handleSubmitBus} color="primary" href="#outlined-buttons">
-                    INSERT
-                  </Button>
-
-                </form>
               </TabPanel>
               <TabPanel value={value2} index={3}>
                 DELETE

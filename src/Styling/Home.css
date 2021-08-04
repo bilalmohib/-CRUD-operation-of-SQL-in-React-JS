@@ -25,3 +25,7 @@
     border-radius: 5px !important;
     font-size: 16px !important;
 }
+.category_select
+{
+    width: fit-content !important;
+}
