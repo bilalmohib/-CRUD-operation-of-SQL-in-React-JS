@@ -30,7 +30,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
-
+//Importing Styling
+import "../Styling/Home.css";
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -371,9 +372,9 @@ export default function Home() {
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <IconButton aria-label="show 4 new mails" color="inherit">
-                <Badge badgeContent={4} color="secondary">
+             
                   <MailIcon />
-                </Badge>
+               
               </IconButton>
               <IconButton aria-label="show 17 new notifications" color="inherit">
                 <Badge badgeContent={17} color="secondary">
@@ -411,60 +412,60 @@ export default function Home() {
       <div className={classes.root}>
         <TabPanel value={value} index={0}>
           <div>
-            <h1 className="text-danger text-center">CRUD Operations for Bus Table</h1>
+            <h1 className="text-dark text-center">CRUD Operations for Bus Table</h1>
           </div>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <div>
-          <h1 className="text-danger text-center">CRUD Operations for Bus Driver Table</h1>
+          <h1 className="text-dark text-center">CRUD Operations for Bus Driver Table</h1>
             
           </div>
         </TabPanel>
         <TabPanel value={value} index={2}>
           <div>
-          <h1 className="text-danger text-center">CRUD Operations for Bus Route Table</h1>
+          <h1 className="text-dark text-center">CRUD Operations for Bus Route Table</h1>
             
           </div>
         </TabPanel>
         <TabPanel value={value} index={3}>
           <div>
-          <h1 className="text-danger text-center">CRUD Operations for Passenger Table</h1>
+          <h1 className="text-dark text-center">CRUD Operations for Passenger Table</h1>
             
           </div>
         </TabPanel>
         <TabPanel value={value} index={4}>
           <div>
-          <h1 className="text-danger text-center">CRUD Operations for Person Table</h1>
+          <h1 className="text-dark text-center">CRUD Operations for Person Table</h1>
             
           </div>
         </TabPanel>
         <TabPanel value={value} index={5}>
           <div>
-          <h1 className="text-danger text-center">CRUD Operations for Schedule Table</h1>
+          <h1 className="text-dark text-center">CRUD Operations for Schedule Table</h1>
             
           </div>
         </TabPanel>
         <TabPanel value={value} index={6}>
           <div>
-          <h1 className="text-danger text-center">CRUD Operations for Seat Table</h1>
+          <h1 className="text-dark text-center">CRUD Operations for Seat Table</h1>
             
           </div>
         </TabPanel>
         <TabPanel value={value} index={7}>
           <div>
-          <h1 className="text-danger text-center">CRUD Operations for Staff Table</h1>
+          <h1 className="text-dark text-center">CRUD Operations for Staff Table</h1>
             
           </div>
         </TabPanel>
         <TabPanel value={value} index={8}>
           <div>
-          <h1 className="text-danger text-center">CRUD Operations for Terminal Table</h1>
+          <h1 className="text-dark text-center">CRUD Operations for Terminal Table</h1>
             
           </div>
         </TabPanel>
         <TabPanel value={value} index={9}>
           <div>
-          <h1 className="text-green text-center">CRUD Operations for Ticket Table</h1>
+          <h1 className="text-dark text-center">CRUD Operations for Ticket Table</h1>
  
           </div>
         </TabPanel>
