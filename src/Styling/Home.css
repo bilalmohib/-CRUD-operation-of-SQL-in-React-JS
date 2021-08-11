@@ -1,0 +1,9 @@
+.text-white
+{
+    color: white !important;
+}
+.text-white:hover
+{
+    color: rgb(235, 235, 235) !important;
+    transition: 0.3s linear;
+}

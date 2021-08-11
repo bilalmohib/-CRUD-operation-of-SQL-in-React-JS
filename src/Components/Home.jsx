@@ -30,12 +30,22 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
-
+import TextField from '@material-ui/core/TextField';
 //
 import Paper from '@material-ui/core/Paper';
 
 //Importing Styling
 import "../Styling/Home.css";
+
+const formStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+      width: '25ch',
+    },
+  },
+}));
+
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -116,6 +126,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const useStyles2 = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: "theme.palette.background.paper",
+  },
+}));
+
 //The vertical tabs code
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -150,15 +167,43 @@ function a11yProps(index) {
   };
 }
 
+function a12yProps(index) {
+  return {
+    id: `nav-tab-${index}`,
+    'aria-controls': `nav-tabpanel-${index}`,
+  };
+}
+
+
 //The vertical tabs code
+
+function LinkTab(props) {
+  return (
+    <Tab
+      component="a"
+      onClick={(event) => {
+        event.preventDefault();
+      }}
+      {...props}
+    />
+  );
+}
 
 export default function Home() {
   const classes = useStyles();
+  const classes2 = useStyles2();
+  const classesForm = formStyles();
 
   //Vertical Tabs
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const [value2, setValue2] = React.useState(0);
+
+  const handleChange2 = (event, newValue) => {
+    setValue2(newValue);
   };
   //Vertical Tabs
 
@@ -376,9 +421,9 @@ export default function Home() {
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <IconButton aria-label="show 4 new mails" color="inherit">
-             
-                  <MailIcon />
-               
+
+                <MailIcon />
+
               </IconButton>
               <IconButton aria-label="show 17 new notifications" color="inherit">
                 <Badge badgeContent={17} color="secondary">
@@ -417,60 +462,83 @@ export default function Home() {
         <TabPanel value={value} index={0}>
           <div>
             <h1 className="text-dark text-center">CRUD Operations for Bus Table</h1>
+            <div className={classes2.root}>
+              <AppBar position="static">
+                <Tabs
+                  variant="fullWidth"
+                  value={value2}
+                  onChange={handleChange2}
+                  aria-label="nav tabs example"
+                >
+                  <LinkTab className="text-white" label="INSERT" href="/drafts" {...a12yProps(0)} />
+                  <LinkTab className="text-white" label="UPDATE" href="/trash" {...a12yProps(1)} />
+                  <LinkTab className="text-white" label="DELETE" href="/spam" {...a12yProps(2)} />
+                </Tabs>
+              </AppBar>
+              <TabPanel value={value2} index={0}>
+                INSERT
+              </TabPanel>
+              <TabPanel value={value2} index={1}>
+                UPDATE
+              </TabPanel>
+              <TabPanel value={value2} index={2}>
+                DELETE
+              </TabPanel>
+            </div>
           </div>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <div>
-          <h1 className="text-dark text-center">CRUD Operations for Bus Driver Table</h1>
-            
+            <h1 className="text-dark text-center">CRUD Operations for Bus Driver Table</h1>
+
           </div>
         </TabPanel>
         <TabPanel value={value} index={2}>
           <div>
-          <h1 className="text-dark text-center">CRUD Operations for Bus Route Table</h1>
-            
+            <h1 className="text-dark text-center">CRUD Operations for Bus Route Table</h1>
+
           </div>
         </TabPanel>
         <TabPanel value={value} index={3}>
           <div>
-          <h1 className="text-dark text-center">CRUD Operations for Passenger Table</h1>
-            
+            <h1 className="text-dark text-center">CRUD Operations for Passenger Table</h1>
+
           </div>
         </TabPanel>
         <TabPanel value={value} index={4}>
           <div>
-          <h1 className="text-dark text-center">CRUD Operations for Person Table</h1>
-            
+            <h1 className="text-dark text-center">CRUD Operations for Person Table</h1>
+
           </div>
         </TabPanel>
         <TabPanel value={value} index={5}>
           <div>
-          <h1 className="text-dark text-center">CRUD Operations for Schedule Table</h1>
-            
+            <h1 className="text-dark text-center">CRUD Operations for Schedule Table</h1>
+
           </div>
         </TabPanel>
         <TabPanel value={value} index={6}>
           <div>
-          <h1 className="text-dark text-center">CRUD Operations for Seat Table</h1>
-            
+            <h1 className="text-dark text-center">CRUD Operations for Seat Table</h1>
+
           </div>
         </TabPanel>
         <TabPanel value={value} index={7}>
           <div>
-          <h1 className="text-dark text-center">CRUD Operations for Staff Table</h1>
-            
+            <h1 className="text-dark text-center">CRUD Operations for Staff Table</h1>
+
           </div>
         </TabPanel>
         <TabPanel value={value} index={8}>
           <div>
-          <h1 className="text-dark text-center">CRUD Operations for Terminal Table</h1>
-            
+            <h1 className="text-dark text-center">CRUD Operations for Terminal Table</h1>
+
           </div>
         </TabPanel>
         <TabPanel value={value} index={9}>
           <div>
-          <h1 className="text-dark text-center">CRUD Operations for Ticket Table</h1>
- 
+            <h1 className="text-dark text-center">CRUD Operations for Ticket Table</h1>
+
           </div>
         </TabPanel>
       </div>
