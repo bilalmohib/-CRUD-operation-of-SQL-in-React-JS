@@ -30,6 +30,10 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
+
+//
+import Paper from '@material-ui/core/Paper';
+
 //Importing Styling
 import "../Styling/Home.css";
 
