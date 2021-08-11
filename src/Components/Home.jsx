@@ -393,7 +393,6 @@ export default function Home() {
   }
 
   const handleSubmitBus = () => {
-    alert("Hello")
     fetch('http://localhost:5000/api/' + 'Bus' + {
       method: 'POST',
       headers: {
@@ -586,7 +585,39 @@ export default function Home() {
                 </form>
               </TabPanel>
               <TabPanel value={value2} index={2}>
-                UPDATE
+              <h2>UPDATE the Below Data</h2>
+                <hr />
+                <h3>Select the Bus No Which you want to change</h3>
+                
+
+                <form className={classesForm.root} noValidate onClick={() => handleSubmitBus} autoComplete="off">
+                  <div className="d-flex justify-content-evenly w-100">
+                    <h5 className="mt-3 text-bold">BusNo : </h5>
+                    <TextField className="ml-7" id="standard-basic" label="Enter the BusNo" />
+                  </div>
+
+                  <div className="d-flex justify-content-evenly w-100">
+                    <h5 className="mt-3 text-bold">Color : </h5>
+                    <TextField className="ml-6" id="standard-basic" label="Color" />
+                  </div>
+
+                  <div className="d-flex justify-content-evenly w-100">
+                    <h5 className="mt-3 text-bold">DriverID : </h5>
+                    <TextField className="ml-4" id="standard-basic" label="DriverID" />
+                  </div>
+
+                  <div className="d-flex justify-content-evenly w-100">
+                    <h5 className="mt-3 text-bold">RouteID : </h5>
+                    <TextField className="ml-4" id="standard-basic" label="RouteID" />
+                  </div>
+
+                  <br />
+
+                  <Button variant="outlined" onClick={handleSubmitBus} color="primary" href="#outlined-buttons">
+                    INSERT
+                  </Button>
+
+                </form>
               </TabPanel>
               <TabPanel value={value2} index={3}>
                 DELETE
