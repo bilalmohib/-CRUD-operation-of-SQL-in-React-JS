@@ -31,11 +31,14 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
-//
+//Importing Paper component from material UI
 import Paper from '@material-ui/core/Paper';
 
 //Importing Styling
 import "../Styling/Home.css";
+import { useState } from 'react';
+import { useEffect } from 'react';
+
 
 const formStyles = makeStyles((theme) => ({
   root: {
@@ -129,6 +132,7 @@ const useStyles = makeStyles((theme) => ({
 const useStyles2 = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    width: "100%",
     backgroundColor: "theme.palette.background.paper",
   },
 }));
@@ -210,6 +214,15 @@ export default function Home() {
   //Nav bar code 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
+  //States defined for the data of Bus
+  const [busData, setBusData] = useState([]);
+
+  const [BusNo, setBusNo] = useState("");
+  const [Color, setColor] = useState("");
+  const [DriverID, setDriverID] = useState(0);
+  const [RouteID, setRouteID] = useState("");
+  ////////////////////////////////////
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -369,6 +382,44 @@ export default function Home() {
     </div>
   );
 
+  //Function to fetch the data from the API
+  const refreshList = () => {
+    fetch('http://localhost:5000/api/' + 'Bus')
+      .then(response => response.json())
+      .then(data => {
+        setBusData(data);
+        console.log("Data is equal to==>",data);
+      })
+  }
+
+  const handleSubmitBus = () => {
+    alert("Hello")
+    fetch('http://localhost:5000/api/' + 'Bus' + {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        BusNo: BusNo,
+        Color: Color,
+        DriverID: DriverID,
+        RouteID: RouteID
+      })
+    })
+      .then(res => res.json())
+      .then((result) => {
+        alert(result);
+      },
+        (error) => {
+          alert('Failed to send data');
+        })
+  }
+
+  useEffect(() => {
+    refreshList();
+  })
+
   return (
     <div>
       {['left'].map((anchor) => (
@@ -462,6 +513,7 @@ export default function Home() {
         <TabPanel value={value} index={0}>
           <div>
             <h1 className="text-dark text-center">CRUD Operations for Bus Table</h1>
+            <br />
             <div className={classes2.root}>
               <AppBar position="static">
                 <Tabs
@@ -470,18 +522,73 @@ export default function Home() {
                   onChange={handleChange2}
                   aria-label="nav tabs example"
                 >
-                  <LinkTab className="text-white" label="INSERT" href="/drafts" {...a12yProps(0)} />
-                  <LinkTab className="text-white" label="UPDATE" href="/trash" {...a12yProps(1)} />
-                  <LinkTab className="text-white" label="DELETE" href="/spam" {...a12yProps(2)} />
+                  <LinkTab className="text-white" label="GET" href="/drafts" {...a12yProps(0)} />
+                  <LinkTab className="text-white" label="INSERT" href="/drafts" {...a12yProps(1)} />
+                  <LinkTab className="text-white" label="UPDATE" href="/trash" {...a12yProps(2)} />
+                  <LinkTab className="text-white" label="DELETE" href="/spam" {...a12yProps(3)} />
                 </Tabs>
               </AppBar>
               <TabPanel value={value2} index={0}>
-                INSERT
+                <h2>GET the data</h2>
+                <hr />
+
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>BUS NO.</th>
+                      <th>COLOR</th>
+                      <th>DRIVER ID</th>
+                      <th>ROUTE ID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {busData.map(bus =>
+                      <tr key={bus.BusNo}>
+                        <td>{bus.BusNo}</td>
+                        <td>{bus.Color}</td>
+                        <td>{bus.DriverID}</td>
+                        <td>{bus.RouteID}</td>
+                      </tr>)}
+                  </tbody>
+                </table>
+
               </TabPanel>
               <TabPanel value={value2} index={1}>
-                UPDATE
+                <h2>INSERT the Below Data</h2>
+                <hr />
+                <form className={classesForm.root} noValidate onClick={() => handleSubmitBus} autoComplete="off">
+                  <div className="d-flex justify-content-evenly w-100">
+                    <h5 className="mt-3 text-bold">BusNo : </h5>
+                    <TextField className="ml-7" id="standard-basic" label="Enter the BusNo" />
+                  </div>
+
+                  <div className="d-flex justify-content-evenly w-100">
+                    <h5 className="mt-3 text-bold">Color : </h5>
+                    <TextField className="ml-6" id="standard-basic" label="Color" />
+                  </div>
+
+                  <div className="d-flex justify-content-evenly w-100">
+                    <h5 className="mt-3 text-bold">DriverID : </h5>
+                    <TextField className="ml-4" id="standard-basic" label="DriverID" />
+                  </div>
+
+                  <div className="d-flex justify-content-evenly w-100">
+                    <h5 className="mt-3 text-bold">RouteID : </h5>
+                    <TextField className="ml-4" id="standard-basic" label="RouteID" />
+                  </div>
+
+                  <br />
+
+                  <Button variant="outlined" onClick={handleSubmitBus} color="primary" href="#outlined-buttons">
+                    INSERT
+                  </Button>
+
+                </form>
               </TabPanel>
               <TabPanel value={value2} index={2}>
+                UPDATE
+              </TabPanel>
+              <TabPanel value={value2} index={3}>
                 DELETE
               </TabPanel>
             </div>

@@ -7,3 +7,21 @@
     color: rgb(235, 235, 235) !important;
     transition: 0.3s linear;
 }
+.w-100
+{
+    width: 100% !important;
+    /* border: 1px solid black; */
+}
+.ml-6
+{
+    margin-left: 50px !important;
+}
+.ml-7
+{
+    margin-left: 35px !important;
+}
+.btn-round
+{
+    border-radius: 5px !important;
+    font-size: 16px !important;
+}
