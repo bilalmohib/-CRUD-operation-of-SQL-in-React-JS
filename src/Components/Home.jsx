@@ -225,7 +225,13 @@ export default function Home() {
 
   const [currentBusNo, setCurrentBusNo] = useState(0);
 
-  const [loading,setLoading] = useState(true);
+  //Updated data value
+  const [busNo_U, setBusNo_U] = useState(busData[currentBusNo].BusNo);
+  const [color_U, setColor_U] = useState(busData[currentBusNo].Color);
+  const [driverID_U, setDriverID_U] = useState(busData[currentBusNo].DriverID);
+  const [routeID_U, setRouteID_U] = useState(busData[currentBusNo].RouteID);
+
+  const [loading, setLoading] = useState(true);
   ////////////////////////////////////
 
   const isMenuOpen = Boolean(anchorEl);
@@ -330,14 +336,14 @@ export default function Home() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-    
+
       <div className="d-flex">
         <IconButton className="ml-3" aria-label="show 4 new mails" color="inherit">
           <DirectionsBusIcon fontSize="large" />
         </IconButton>
         <h1 className="mt-2 ml-3">BMS</h1>
       </div>
-      
+
       <div>
         <Tabs
           orientation="vertical"
@@ -357,15 +363,7 @@ export default function Home() {
         </Tabs>
       </div>
 
-      {/* <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List> */}
+      {/* <Divider /> */}
     </div>
   );
 
@@ -375,13 +373,20 @@ export default function Home() {
       .then(response => response.json())
       .then(data => {
         setBusData(data);
+        //Loading is done so setting the loading to false
         setLoading(false);
+        //Updating the data after the loading is done 
+        setBusNo_U(busData[currentBusNo].BusNo);
+        setColor_U(busData[currentBusNo].Color);
+        setDriverID_U(busData[currentBusNo].driverID_U);
+        setRouteID_U(busData[currentBusNo].routeID_U);
+        //Updating the data after the loading is done 
         console.log("Data is equal to==>", data);
       })
   }
 
   const handleSubmitBus = () => {
-    fetch('http://localhost:5000/api/' + 'Bus' + {
+    fetch('http://localhost:5000/api/' + 'Bus', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -396,17 +401,18 @@ export default function Home() {
     })
       .then(res => res.json())
       .then((result) => {
-        alert(result);
+        alert("Sent Successfully");
+        console.log("The Result is ==> " + result);
       },
         (error) => {
-          alert('Failed to send data');
+          alert('Failed to send data' + error);
+          console.log('Failed to send data' + error);
         })
   }
 
-
   useEffect(() => {
     refreshList();
-  })
+  }, [])
 
   return (
     <div>
@@ -500,6 +506,7 @@ export default function Home() {
       <div className={classes.root}>
         <TabPanel value={value} index={0}>
           <div>
+            <br /><br /><br />
             <h1 className="text-dark text-center">CRUD Operations for Bus Table</h1>
             <br />
             <div className={classes2.root}>
@@ -544,30 +551,30 @@ export default function Home() {
               <TabPanel value={value2} index={1}>
                 <h2>INSERT the Below Data</h2>
                 <hr />
-                <form className={classesForm.root} noValidate onClick={() => handleSubmitBus} autoComplete="off">
+                <form className={classesForm.root} noValidate autoComplete="off">
                   <div className="d-flex justify-content-evenly w-100">
                     <h5 className="mt-3 text-bold">BusNo : </h5>
-                    <TextField className="ml-7" id="standard-basic" label="Enter the BusNo" />
+                    <TextField className="ml-7" id="standard-basic" onChange={(e) => setBusNo(e.target.value)} label="Enter the BusNo" />
                   </div>
 
                   <div className="d-flex justify-content-evenly w-100">
                     <h5 className="mt-3 text-bold">Color : </h5>
-                    <TextField className="ml-6" id="standard-basic" label="Color" />
+                    <TextField className="ml-6" id="standard-basic" label="Color" onChange={(e) => setColor(e.target.value)} />
                   </div>
 
                   <div className="d-flex justify-content-evenly w-100">
                     <h5 className="mt-3 text-bold">DriverID : </h5>
-                    <TextField className="ml-4" id="standard-basic" label="DriverID" />
+                    <TextField className="ml-4" id="standard-basic" label="DriverID" onChange={(e) => setDriverID(e.target.value)} />
                   </div>
 
                   <div className="d-flex justify-content-evenly w-100">
                     <h5 className="mt-3 text-bold">RouteID : </h5>
-                    <TextField className="ml-4" id="standard-basic" label="RouteID" />
+                    <TextField className="ml-4" id="standard-basic" label="RouteID" onChange={(e) => setRouteID(e.target.value)} />
                   </div>
 
                   <br />
 
-                  <Button variant="outlined" onClick={handleSubmitBus} color="primary" href="#outlined-buttons">
+                  <Button variant="outlined" onClick={handleSubmitBus} color="primary">
                     INSERT
                   </Button>
 
@@ -593,34 +600,34 @@ export default function Home() {
 
                 {(loading) ? (
                   <>
-                      <h3 className="text-success text-center">LOADING</h3>
+                    <h3 className="text-success text-center">LOADING</h3>
                   </>
                 ) : (
                   <>
                     <form className={classesForm.root} noValidate onClick={() => handleSubmitBus} autoComplete="off">
                       <div className="d-flex justify-content-evenly w-100">
                         <h5 className="mt-3 text-bold">BusNo : </h5>
-                        <TextField className="ml-7" id="standard-basic" label="Enter the BusNo" value={busData[currentBusNo].BusNo} />
+                        <TextField className="ml-7" id="standard-basic" label="Enter the BusNo" value={busNo_U} />
                       </div>
 
                       <div className="d-flex justify-content-evenly w-100">
                         <h5 className="mt-3 text-bold">Color : </h5>
-                        <TextField className="ml-6" id="standard-basic" label="Color" value={busData[currentBusNo].Color} />
+                        <TextField className="ml-6" id="standard-basic" label="Color" value={color_U} />
                       </div>
 
                       <div className="d-flex justify-content-evenly w-100">
                         <h5 className="mt-3 text-bold">DriverID : </h5>
-                        <TextField className="ml-4" id="standard-basic" label="DriverID" value={busData[currentBusNo].DriverID} />
+                        <TextField className="ml-4" id="standard-basic" label="DriverID" value={driverID_U} />
                       </div>
 
                       <div className="d-flex justify-content-evenly w-100">
                         <h5 className="mt-3 text-bold">RouteID : </h5>
-                        <TextField className="ml-4" id="standard-basic" label="RouteID" value={busData[currentBusNo].RouteID} />
+                        <TextField className="ml-4" id="standard-basic" label="RouteID" value={routeID_U} />
                       </div>
                       <br />
-                      
+
                       <button className="btn btn-success btn-round">UPDATE</button>
-                      
+
                     </form>
                   </>
                 )}
