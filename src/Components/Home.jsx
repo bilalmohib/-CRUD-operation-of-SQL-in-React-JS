@@ -225,14 +225,14 @@ export default function Home() {
 
   const [currentBusNo, setCurrentBusNo] = useState(0);
 
-  //Updated data value
-  const [busNo_U, setBusNo_U] = useState(busData[currentBusNo].BusNo);
-  const [color_U, setColor_U] = useState(busData[currentBusNo].Color);
-  const [driverID_U, setDriverID_U] = useState(busData[currentBusNo].DriverID);
-  const [routeID_U, setRouteID_U] = useState(busData[currentBusNo].RouteID);
-
   const [loading, setLoading] = useState(true);
-  ////////////////////////////////////
+
+  //Updated data state start over here
+  const [busNo_U, setBusNo_U] = useState("");
+  const [color_U, setColor_U] = useState("");
+  const [driverID_U, setDriverID_U] = useState(0);
+  const [routeID_U, setRouteID_U] = useState("");
+  //Updated data state start over here
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -376,10 +376,10 @@ export default function Home() {
         //Loading is done so setting the loading to false
         setLoading(false);
         //Updating the data after the loading is done 
-        setBusNo_U(busData[currentBusNo].BusNo);
-        setColor_U(busData[currentBusNo].Color);
-        setDriverID_U(busData[currentBusNo].driverID_U);
-        setRouteID_U(busData[currentBusNo].routeID_U);
+        setBusNo_U(data[currentBusNo].BusNo);
+        setColor_U(data[currentBusNo].Color);
+        setDriverID_U(data[currentBusNo].DriverID);
+        setRouteID_U(data[currentBusNo].RouteID);
         //Updating the data after the loading is done 
         console.log("Data is equal to==>", data);
       })
@@ -408,6 +408,53 @@ export default function Home() {
           alert('Failed to send data' + error);
           console.log('Failed to send data' + error);
         })
+  }
+
+  const handleUpdateBus = () => {
+    fetch('http://localhost:5000/api/' + 'Bus', {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        BusNo: busNo_U,
+        Color: color_U,
+        DriverID: driverID_U,
+        RouteID: routeID_U
+      })
+    })
+      .then(res => res.json())
+      .then((result) => {
+        alert("Updated Successfully");
+        console.log("The Result is ==> " + result);
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+      },
+        (error) => {
+          alert('Failed to send data' + error);
+          console.log('Failed to send data' + error);
+        })
+  }
+
+  //Changing the current bus number
+  const changingTheCurrentBusNoValue = (e) => {
+
+    let index = e.target.value;
+
+    //alert(e.target.value);
+
+    setCurrentBusNo(e.target.value);
+
+    setBusNo_U(busData[index].BusNo);
+    setColor_U(busData[index].Color);
+    setDriverID_U(busData[index].DriverID);
+    setRouteID_U(busData[index].RouteID);
   }
 
   useEffect(() => {
@@ -549,7 +596,7 @@ export default function Home() {
 
               </TabPanel>
               <TabPanel value={value2} index={1}>
-                <h2>INSERT the Below Data</h2>
+                <h2>INSERT the Data</h2>
                 <hr />
                 <form className={classesForm.root} noValidate autoComplete="off">
                   <div className="d-flex justify-content-evenly w-100">
@@ -581,14 +628,14 @@ export default function Home() {
                 </form>
               </TabPanel>
               <TabPanel value={value2} index={2}>
-                <h2>UPDATE the Below Data</h2>
+                <h2>UPDATE the Data</h2>
                 <hr />
                 <h3>Select the Bus No Which you want to change</h3>
                 <br />
                 <div className="input-group input-group-md category_select">
                   <span className="input-group-addon glyphicon glyphicon-search" id="sizing-addon2"></span>
                   <select style={{ fontSize: "15px", width: "200px" }} value={currentBusNo}
-                    onChange={(e) => setCurrentBusNo(e.target.value)} className="form-control">
+                    onChange={(e) => changingTheCurrentBusNoValue(e)} className="form-control">
                     {busData.map((v, i) => {
                       return <option value={i} key={i}>
                         {v.BusNo}
@@ -612,21 +659,21 @@ export default function Home() {
 
                       <div className="d-flex justify-content-evenly w-100">
                         <h5 className="mt-3 text-bold">Color : </h5>
-                        <TextField className="ml-6" id="standard-basic" label="Color" value={color_U} />
+                        <TextField className="ml-6" id="standard-basic" label="Color" onChange={(e) => setColor_U(e.target.value)} value={color_U} />
                       </div>
 
                       <div className="d-flex justify-content-evenly w-100">
                         <h5 className="mt-3 text-bold">DriverID : </h5>
-                        <TextField className="ml-4" id="standard-basic" label="DriverID" value={driverID_U} />
+                        <TextField className="ml-4" id="standard-basic" label="DriverID" onChange={(e) => setDriverID_U(e.target.value)} value={driverID_U} />
                       </div>
 
                       <div className="d-flex justify-content-evenly w-100">
                         <h5 className="mt-3 text-bold">RouteID : </h5>
-                        <TextField className="ml-4" id="standard-basic" label="RouteID" value={routeID_U} />
+                        <TextField className="ml-4" id="standard-basic" label="RouteID" onChange={(e) => setRouteID_U(e.target.value)} value={routeID_U} />
                       </div>
                       <br />
 
-                      <button className="btn btn-success btn-round">UPDATE</button>
+                      <button onClick={handleUpdateBus} className="btn btn-success btn-round">UPDATE</button>
 
                     </form>
                   </>
